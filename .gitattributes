@@ -1,0 +1,3 @@
+* text=auto
+*.sh text eol=lf   # 强制Shell脚本使用LF
+*.bat text eol=crlf # 强制批处理文件使用CRLF
