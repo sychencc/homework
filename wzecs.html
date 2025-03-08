@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>文字二叉树</title>
+    <style>
+        canvas {
+            background-color: #ffffff;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+    
+        canvas.width = 1600;
+        canvas.height = 1200; 
+
+        const initialLength = 300; 
+        const reductionFactor = 0.7; 
+        const depth = 10; 
+        const trunkWidth = 30;
+        const textColor = '#0f1e55'; 
+        const startX = canvas.width / 2;
+        const startY = canvas.height - 150; // 往下移动100像素
+        const text = "此恨绵绵无绝期";
+
+        function drawTree(x, y, length, angle, depth, width) {
+            if (depth === 0) {
+                return;
+            }
+         
+            const endX = x + length * Math.cos(angle);
+            const endY = y + length * Math.sin(angle);
+   
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            ctx.fillStyle = textColor; 
+            ctx.font = `${width}px Arial`;
+            ctx.fillText(text, 0, 0);
+            ctx.restore();
+
+            const randomAngleOffset = (Math.random() - 0.5) * Math.PI / 6; 
+            const leftAngle = angle - Math.PI / 6 + randomAngleOffset;
+            const rightAngle = angle + Math.PI / 6 + randomAngleOffset;
+
+            const randomReduction = reductionFactor + Math.random() * 0.1;
+            const newLength = length * randomReduction;
+
+            drawTree(endX, endY, newLength, leftAngle, depth - 1, width * 0.7);
+            drawTree(endX, endY, newLength, rightAngle, depth - 1, width * 0.7);
+        }
+
+        ctx.save();
+        ctx.translate(startX, startY);
+        ctx.rotate(-Math.PI / 2); 
+
+        drawTree(0, 0, initialLength, 0, depth, trunkWidth);
+
+        ctx.restore();
+
+        ctx.fillStyle = '#333';
+        ctx.font = '30px Arial'; 
+        ctx.textAlign = 'center'; // 标题居中
+        ctx.fillText('文字二叉树', canvas.width / 2, 50);
+    </script>
+</body>
+</html>
